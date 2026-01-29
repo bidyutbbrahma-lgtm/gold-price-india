@@ -1,6 +1,7 @@
 import requests
 import csv
 import os
+import subprocess
 from datetime import datetime
 
 
@@ -8,21 +9,23 @@ from datetime import datetime
 # CONFIG
 # ============================
 
-API_KEY = "goldapi-h5rolsmkzhkcgw-io"   # ⚠️ Hide later in production
+API_KEY = "goldapi-h5rolsmkzhkcgw-io"   # ⚠️ Hide later
 
 SYMBOL = "XAU"
 CURRENCY = "INR"
 
 URL = f"https://www.goldapi.io/api/{SYMBOL}/{CURRENCY}"
 
-CSV_FILE = "gold_prices_india.csv"
-HTML_FILE = "index.html"
+BASE_DIR = os.getcwd()
+
+CSV_FILE = os.path.join(BASE_DIR, "gold_prices_india.csv")
+HTML_FILE = os.path.join(BASE_DIR, "index.html")
 
 TIMEOUT = 15
 
 
 # ============================
-# CHECK IF ALREADY RUN TODAY
+# CHECK IF RAN TODAY
 # ============================
 
 def already_ran_today():
@@ -44,7 +47,7 @@ def already_ran_today():
 
 
 # ============================
-# FETCH FROM API
+# FETCH API DATA
 # ============================
 
 def fetch_gold_data():
@@ -66,7 +69,7 @@ def fetch_gold_data():
 
 
 # ============================
-# SAVE TO CSV
+# SAVE CSV
 # ============================
 
 def save_to_csv(price, high, low):
@@ -75,7 +78,7 @@ def save_to_csv(price, high, low):
 
     header = ["Datetime", "Price_INR", "High_INR", "Low_INR"]
 
-    row = [now, price, high, high]
+    row = [now, price, high, low]
 
     file_exists = os.path.exists(CSV_FILE)
 
@@ -108,7 +111,7 @@ def generate_html(price, high, low):
     <title>Gold Price in India Today - {today}</title>
 
     <meta charset="utf-8">
-    <meta name="description" content="Live gold price in India today. Updated daily. 24K gold rates.">
+    <meta name="description" content="Live gold price in India today. Updated daily.">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -120,7 +123,7 @@ def generate_html(price, high, low):
 
 <p><b>Last Updated:</b> {today}</p>
 
-<h2>Current Gold Rates</h2>
+<h2>Current Rates</h2>
 
 <table border="1" cellpadding="10" cellspacing="0">
 
@@ -146,7 +149,7 @@ def generate_html(price, high, low):
 
 </table>
 
-<p>Rates are updated automatically every day.</p>
+<p>Updated automatically every day.</p>
 
 <hr>
 
@@ -165,75 +168,30 @@ def generate_html(price, high, low):
 
 
 # ============================
-# MAIN
+# REBUILD FROM CSV
 # ============================
 
-def main():
+def rebuild_from_csv():
 
-    print("===================================")
-    print(" Gold Auto Website Script Started")
-    print("===================================")
+    try:
+        with open(CSV_FILE, "r", encoding="utf-8") as f:
 
-    # If already ran today, rebuild site from latest CSV
-    if already_ran_today():
-        print("Already updated today. Rebuilding website...")
+            lines = f.readlines()
 
-        try:
-            with open(CSV_FILE, "r", encoding="utf-8") as f:
-                lines = f.readlines()
+            if len(lines) < 2:
+                print("CSV empty.")
+                return False
 
-                if len(lines) < 2:
-                    print("CSV has no data yet.")
-                    return
+            last = lines[-1].strip().split(",")
 
-                last = lines[-1].strip().split(",")
+            price = last[1]
+            high = last[2]
+            low = last[3]
 
-                price = last[1]
-                high = last[2]
-                low = last[3]
+            generate_html(price, high, low)
 
-                generate_html(price, high, low)
+            return Tru
 
-                print("Website rebuilt from CSV.")
-
-        except Exception as e:
-            print("Rebuild Error:", e)
-
-        return
-
-    # Normal API flow
-    print("Fetching gold data...")
-
-    data = fetch_gold_data()
-
-    if not data:
-        print("No data. Exiting.")
-        return
-
-    price = data.get("price")
-    high = data.get("high_price")
-    low = data.get("low_price")
-
-    if not price:
-        print("Invalid response:", data)
-        return
-
-    print("-----------------------------")
-    print("Price:", price)
-    print("High :", high)
-    print("Low  :", low)
-    print("-----------------------------")
-
-    save_to_csv(price, high, low)
-
-    generate_html(price, high, low)
-
-    print("CSV and Website Updated")
-    print("Done.")
-
-
-
-# ============================
 # RUN
 # ============================
 
