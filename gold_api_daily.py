@@ -113,6 +113,27 @@ def generate_html(price, high, low):
     <meta name="google-site-verification" content="B6PZgT-4bZtyxNfov8ddBxlJjSDgH8bBR6q7Ws2pqSo" />
 </head>
 
+
+
+<body style="font-family: Arial; max-width: 720px; margin: auto; padding: 20px; background:#fafafa;">
+
+<h1>Gold Price in India Today</h1>
+
+<p><b>Last Updated:</b> {now}</p>
+
+<h2>Current Rates</h2>
+
+<table border="1" cellpadding="10" cellspacing="0">
+
+<tr><th>Type</th><th>Price (INR)</th></tr>
+<tr><td>Spot</td><td>₹{price}</td></tr>
+<tr><td>High</td><td>₹{high}</td></tr>
+<tr><td>Low</td><td>₹{low}</td></tr>
+
+</table>
+
+<p>Updated automatically every day.</p>
+
 <hr>
 
 <h2>Gold Price FAQs</h2>
@@ -146,25 +167,6 @@ This website updates gold prices automatically every day.
 Gold is considered a long-term store of value and a hedge against inflation.
 Many investors track daily gold prices before making buying or investment decisions.
 </p>
-
-<body style="font-family: Arial; max-width: 720px; margin: auto; padding: 20px; background:#fafafa;">
-
-<h1>Gold Price in India Today</h1>
-
-<p><b>Last Updated:</b> {now}</p>
-
-<h2>Current Rates</h2>
-
-<table border="1" cellpadding="10" cellspacing="0">
-
-<tr><th>Type</th><th>Price (INR)</th></tr>
-<tr><td>Spot</td><td>₹{price}</td></tr>
-<tr><td>High</td><td>₹{high}</td></tr>
-<tr><td>Low</td><td>₹{low}</td></tr>
-
-</table>
-
-<p>Updated automatically every day.</p>
 
 <hr>
 <p style="font-size:14px;">Powered by Bidyut's Gold Tracker</p>
