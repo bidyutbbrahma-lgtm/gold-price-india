@@ -113,6 +113,39 @@ def generate_html(price, high, low):
     <meta name="google-site-verification" content="B6PZgT-4bZtyxNfov8ddBxlJjSDgH8bBR6q7Ws2pqSo" />
 </head>
 
+<hr>
+
+<h2>Gold Price FAQs</h2>
+
+<h3>What is today’s gold price in India?</h3>
+<p>
+Today’s gold price in India depends on international gold rates, USD–INR exchange rate, and local demand.
+This page shows the latest updated gold price in India for 24K and 22K gold.
+</p>
+
+<h3>Is gold price the same across all cities in India?</h3>
+<p>
+Gold prices are largely similar across India, but small differences may occur due to local taxes,
+transport costs, and jeweller margins in different cities.
+</p>
+
+<h3>What is the difference between 24K and 22K gold?</h3>
+<p>
+24K gold is pure gold (99.9%) and is mainly used for investment.
+22K gold contains a small amount of other metals and is commonly used for jewellery.
+</p>
+
+<h3>How often does the gold price change in India?</h3>
+<p>
+Gold prices change daily based on international market movements.
+This website updates gold prices automatically every day.
+</p>
+
+<h3>Is gold a good investment in India?</h3>
+<p>
+Gold is considered a long-term store of value and a hedge against inflation.
+Many investors track daily gold prices before making buying or investment decisions.
+</p>
 
 <body style="font-family: Arial; max-width: 720px; margin: auto; padding: 20px; background:#fafafa;">
 
