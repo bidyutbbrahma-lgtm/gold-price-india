@@ -99,18 +99,21 @@ def save_to_csv(price, high, low):
 # =========================
 
 def generate_html(price, high, low):
-
+    
     now = datetime.now().strftime("%d %B %Y, %I:%M %p")
 
     html = f"""
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gold Price in India Today</title>
+    <title>Gold Price in India Today (24K & 22K) | Live Gold Rate</title>
     <meta charset="utf-8">
-    <meta name="description" content="Live gold price in India. Updated daily.">
+    <meta name="description" content="Check today’s gold price in India. Live 24K & 22K gold rates per gram, updated daily.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="google-site-verification" content="B6PZgT-4bZtyxNfov8ddBxlJjSDgH8bBR6q7Ws2pqSo" />
 </head>
+
 
 <body style="font-family: Arial; max-width: 720px; margin: auto; padding: 20px; background:#fafafa;">
 
