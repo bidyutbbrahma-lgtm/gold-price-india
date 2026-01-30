@@ -114,7 +114,6 @@ def generate_html(price, high, low):
 </head>
 
 
-
 <body style="font-family: Arial; max-width: 720px; margin: auto; padding: 20px; background:#fafafa;">
 
 <h1>Gold Price in India Today</h1>
