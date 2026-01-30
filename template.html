@@ -1,16 +1,15 @@
+<!-- template.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>{{TITLE}}</title>
-
     <meta charset="utf-8">
     <meta name="description" content="{{META_DESCRIPTION}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     {{FAQ_SCHEMA}}
 </head>
 
-<body style="font-family: Arial, sans-serif; max-width: 760px; margin: auto; padding: 20px; line-height: 1.6;">
+<body style="font-family: Arial, sans-serif; max-width:760px; margin:auto; padding:20px; line-height:1.6;">
 
 <nav style="margin-bottom:20px; font-size:15px; text-align:center;">
   <a href="index.html" style="margin-right:15px;">Home</a>
@@ -23,72 +22,38 @@
 <p style="text-align:center;"><strong>Last Updated:</strong> {{LAST_UPDATED}}</p>
 
 <p style="text-align:center;">
-This page provides the latest <strong>gold price in India today</strong>, including
-<a href="investment.html"><strong>24K and 22K gold rates per gram</strong></a>.
-Prices are updated daily based on international gold markets and currency exchange rates.
+Live gold prices in India shown <strong>per troy ounce, per gram, and per 10 grams</strong>.
+Prices are converted from international gold markets and updated daily.
 </p>
 
 <h2 style="text-align:center;">Current Gold Rates</h2>
 
-<table style="
-    border-collapse: collapse;
-    width: 100%;
-    text-align: center;
-    border: 3px solid #000;
-">
-    <tr>
-        <th style="border: 3px solid #000; padding: 10px;">Gold Type</th>
-        <th style="border: 3px solid #000; padding: 10px;">Price (INR)</th>
-    </tr>
-    <tr>
-        <td style="border: 3px solid #000; padding: 10px;">Spot Price</td>
-        <td style="border: 3px solid #000; padding: 10px;">₹{{PRICE}}</td>
-    </tr>
-    <tr>
-        <td style="border: 3px solid #000; padding: 10px;">Day High</td>
-        <td style="border: 3px solid #000; padding: 10px;">₹{{HIGH}}</td>
-    </tr>
-    <tr>
-        <td style="border: 3px solid #000; padding: 10px;">Day Low</td>
-        <td style="border: 3px solid #000; padding: 10px;">₹{{LOW}}</td>
-    </tr>
+<table style="border-collapse:collapse; width:100%; text-align:center; border:3px solid #000;">
+<tr>
+  <th style="border:3px solid #000; padding:10px;">Unit</th>
+  <th style="border:3px solid #000; padding:10px;">Spot</th>
+  <th style="border:3px solid #000; padding:10px;">High</th>
+  <th style="border:3px solid #000; padding:10px;">Low</th>
+</tr>
+<tr>
+  <td style="border:3px solid #000; padding:10px;">Per Troy Ounce (31.1g)</td>
+  <td style="border:3px solid #000; padding:10px;">₹{{PRICE_OUNCE}}</td>
+  <td style="border:3px solid #000; padding:10px;">₹{{HIGH_OUNCE}}</td>
+  <td style="border:3px solid #000; padding:10px;">₹{{LOW_OUNCE}}</td>
+</tr>
+<tr>
+  <td style="border:3px solid #000; padding:10px;">Per Gram</td>
+  <td style="border:3px solid #000; padding:10px;">₹{{PRICE_GRAM}}</td>
+  <td style="border:3px solid #000; padding:10px;">₹{{HIGH_GRAM}}</td>
+  <td style="border:3px solid #000; padding:10px;">₹{{LOW_GRAM}}</td>
+</tr>
+<tr>
+  <td style="border:3px solid #000; padding:10px;"><strong>Per 10 Grams</strong></td>
+  <td style="border:3px solid #000; padding:10px;"><strong>₹{{PRICE_10G}}</strong></td>
+  <td style="border:3px solid #000; padding:10px;"><strong>₹{{HIGH_10G}}</strong></td>
+  <td style="border:3px solid #000; padding:10px;"><strong>₹{{LOW_10G}}</strong></td>
+</tr>
 </table>
-
-<hr>
-
-<h2 style="text-align:center;">Gold Price FAQs</h2>
-
-<h3>What is today's gold price in India?</h3>
-<p>
-Today's gold price in India is influenced by international gold prices, the USD to INR
-exchange rate, and domestic demand. This website provides the latest updated gold price
-in India for both 24K and 22K gold, refreshed daily using reliable market data.
-</p>
-
-<h3>Why does the gold price change every day in India?</h3>
-<p>
-Gold prices in India change daily due to fluctuations in global gold markets,
-currency exchange movements, inflation expectations, and geopolitical factors.
-</p>
-
-<h3>Is the gold price the same across all cities in India?</h3>
-<p>
-Gold prices are generally similar across major Indian cities, but small differences
-may occur due to local taxes, transportation costs, and jeweller margins.
-</p>
-
-<h3>What is the difference between 24K and 22K gold in India?</h3>
-<p>
-24K gold is 99.9 percent pure and is mainly used for investment purposes such as coins
-and bars. 22K gold contains other metals for durability and is commonly used in jewellery.
-</p>
-
-<h3>Is gold a good investment in India?</h3>
-<p>
-Gold is considered a long-term store of value in India and is often used as a hedge
-against inflation. Learn more about
-<a href="investment.html">gold investment options in India</a>.
-</p>
 
 <hr>
 
@@ -99,7 +64,7 @@ against inflation. Learn more about
 </p>
 
 <p style="font-size:13px; color:#555; text-align:center;">
-  Informational purposes only. Prices may vary by city and jeweller.
+Informational purposes only. Prices may vary by city and jeweller.
 </p>
 
 </body>

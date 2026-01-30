@@ -1,12 +1,12 @@
+# gold_api_daily.py
 import requests
-import csv
-import os
-import subprocess
 from datetime import datetime
+import subprocess
+import os
 
-# =====================================================
-# FAQ SCHEMA (JSON-LD) — SAFE, NOT AN F-STRING
-# =====================================================
+API_KEY = "goldapi-h5rolsmkzhkcgw-io"
+URL = "https://www.goldapi.io/api/XAU/INR"
+OUNCE_TO_GRAM = 31.1035
 
 FAQ_SCHEMA = """
 <script type="application/ld+json">
@@ -19,39 +19,15 @@ FAQ_SCHEMA = """
       "name": "What is today's gold price in India?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Today's gold price in India depends on international gold rates, USD-INR exchange rate, and local demand. This page shows the latest updated gold price in India for 24K and 22K gold."
+        "text": "Today's gold price in India is derived from international gold markets and converted into Indian Rupees. This page shows gold prices per ounce, per gram, and per 10 grams."
       }
     },
     {
       "@type": "Question",
-      "name": "Is gold price the same across all cities in India?",
+      "name": "Why does gold price change daily?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Gold prices are largely similar across India, but small differences may occur due to local taxes, transport costs, and jeweller margins."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is the difference between 24K and 22K gold?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "24K gold is pure gold and mainly used for investment, while 22K gold is commonly used for jewellery."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How often does the gold price change in India?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Gold prices in India change daily based on international market movements."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is gold a good investment in India?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Gold is considered a long-term store of value and a hedge against inflation."
+        "text": "Gold prices change daily due to global demand, currency movements, interest rates, inflation expectations, and geopolitical events."
       }
     }
   ]
@@ -59,154 +35,58 @@ FAQ_SCHEMA = """
 </script>
 """
 
-# =====================================================
-# CONFIG
-# =====================================================
-
-API_KEY = "goldapi-h5rolsmkzhkcgw-io"   # move to env later
-SYMBOL = "XAU"
-CURRENCY = "INR"
-
-URL = f"https://www.goldapi.io/api/{SYMBOL}/{CURRENCY}"
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CSV_FILE = os.path.join(BASE_DIR, "gold_prices_india.csv")
-HTML_FILE = os.path.join(BASE_DIR, "index.html")
-
-TIMEOUT = 15
-
-
-# =====================================================
-# CHECK IF ALREADY RAN TODAY
-# =====================================================
-
-def already_ran_today():
-    today = datetime.now().strftime("%Y-%m-%d")
-
-    if not os.path.exists(CSV_FILE):
-        return False
-
-    with open(CSV_FILE, "r", encoding="utf-8") as f:
-        return today in f.read()
-
-
-# =====================================================
-# FETCH API DATA
-# =====================================================
-
-def fetch_gold_data():
+def fetch_gold_price():
     headers = {
         "x-access-token": API_KEY,
         "Content-Type": "application/json"
     }
-
-    try:
-        r = requests.get(URL, headers=headers, timeout=TIMEOUT)
-        r.raise_for_status()
-        return r.json()
-    except Exception as e:
-        print("API Error:", e)
-        return None
-
-
-# =====================================================
-# SAVE CSV
-# =====================================================
-
-def save_to_csv(price, high, low):
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    exists = os.path.exists(CSV_FILE)
-
-    with open(CSV_FILE, "a", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        if not exists:
-            writer.writerow(["Datetime", "Price_INR", "High_INR", "Low_INR"])
-        writer.writerow([now, price, high, low])
-
-
-# =====================================================
-# GENERATE HTML
-# =====================================================
+    res = requests.get(URL, headers=headers)
+    res.raise_for_status()
+    data = res.json()
+    return data["price"], data["high_price"], data["low_price"]
 
 def generate_html(price, high, low):
+    price_g = round(price / OUNCE_TO_GRAM, 2)
+    high_g = round(high / OUNCE_TO_GRAM, 2)
+    low_g = round(low / OUNCE_TO_GRAM, 2)
+
+    price_10g = round(price_g * 10, 2)
+    high_10g = round(high_g * 10, 2)
+    low_10g = round(low_g * 10, 2)
+
     now = datetime.now().strftime("%d %B %Y, %I:%M %p")
 
     with open("template.html", "r", encoding="utf-8") as f:
         html = f.read()
 
-    html = html.replace("{{TITLE}}", "Gold Price in India Today (24K & 22K)")
+    html = html.replace("{{TITLE}}", "Gold Price in India Today – Per Gram & 10g")
     html = html.replace("{{META_DESCRIPTION}}",
-                        "Check today's gold price in India. Live 24K and 22K gold rates updated daily.")
+                        "Check today's gold price in India. View gold rates per ounce, per gram, and per 10 grams updated daily.")
     html = html.replace("{{LAST_UPDATED}}", now)
-    html = html.replace("{{PRICE}}", str(price))
-    html = html.replace("{{HIGH}}", str(high))
-    html = html.replace("{{LOW}}", str(low))
+
+    html = html.replace("{{PRICE_OUNCE}}", str(price))
+    html = html.replace("{{HIGH_OUNCE}}", str(high))
+    html = html.replace("{{LOW_OUNCE}}", str(low))
+
+    html = html.replace("{{PRICE_GRAM}}", str(price_g))
+    html = html.replace("{{HIGH_GRAM}}", str(high_g))
+    html = html.replace("{{LOW_GRAM}}", str(low_g))
+
+    html = html.replace("{{PRICE_10G}}", str(price_10g))
+    html = html.replace("{{HIGH_10G}}", str(high_10g))
+    html = html.replace("{{LOW_10G}}", str(low_10g))
+
     html = html.replace("{{FAQ_SCHEMA}}", FAQ_SCHEMA)
 
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
 
-
-# =====================================================
-# REBUILD FROM CSV
-# =====================================================
-
-def rebuild_from_csv():
-    with open(CSV_FILE, "r", encoding="utf-8") as f:
-        lines = f.readlines()
-        if len(lines) < 2:
-            return False
-
-        last = lines[-1].strip().split(",")
-        generate_html(last[1], last[2], last[3])
-        return True
-
-
-# =====================================================
-# GIT PUSH
-# =====================================================
-
 def git_push():
-    try:
-        subprocess.run(["git", "add", "."], check=True)
-        subprocess.run(["git", "commit", "-m", "Auto daily update"], check=True)
-        subprocess.run(["git", "push"], check=True)
-        print("GitHub updated.")
-    except subprocess.CalledProcessError:
-        print("Nothing new to push.")
-
-
-# =====================================================
-# MAIN
-# =====================================================
-
-def main():
-    print("===================================")
-    print(" Gold Auto System Running")
-    print("===================================")
-
-    if already_ran_today():
-        print("Already ran today. Rebuilding site...")
-        rebuild_from_csv()
-        git_push()
-        return
-
-    data = fetch_gold_data()
-    if not data:
-        return
-
-    price = data.get("price")
-    high = data.get("high_price")
-    low = data.get("low_price")
-
-    save_to_csv(price, high, low)
-    generate_html(price, high, low)
-    git_push()
-
-
-# =====================================================
-# RUN
-# =====================================================
+    subprocess.run(["git", "add", "."], check=True)
+    subprocess.run(["git", "commit", "-m", "Auto daily update"], check=True)
+    subprocess.run(["git", "push"], check=True)
 
 if __name__ == "__main__":
-    main()
+    price, high, low = fetch_gold_price()
+    generate_html(price, high, low)
+    git_push()
