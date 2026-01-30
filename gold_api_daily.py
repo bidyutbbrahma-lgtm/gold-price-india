@@ -131,60 +131,21 @@ def save_to_csv(price, high, low):
 def generate_html(price, high, low):
     now = datetime.now().strftime("%d %B %Y, %I:%M %p")
 
-    html = f"""
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Gold Price in India Today (24K & 22K)</title>
-    <meta charset="utf-8">
-    <meta name="description" content="Check today's gold price in India. Live 24K and 22K gold rates updated daily.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    with open("template.html", "r", encoding="utf-8") as f:
+        html = f.read()
 
-    {FAQ_SCHEMA}
+    html = html.replace("{{TITLE}}", "Gold Price in India Today (24K & 22K)")
+    html = html.replace("{{META_DESCRIPTION}}",
+                        "Check today's gold price in India. Live 24K and 22K gold rates updated daily.")
+    html = html.replace("{{LAST_UPDATED}}", now)
+    html = html.replace("{{PRICE}}", str(price))
+    html = html.replace("{{HIGH}}", str(high))
+    html = html.replace("{{LOW}}", str(low))
+    html = html.replace("{{FAQ_SCHEMA}}", FAQ_SCHEMA)
 
-</head>
-<body style="font-family:Arial; max-width:720px; margin:auto; padding:20px;">
-
-<h1>Gold Price in India Today</h1>
-<p><b>Last Updated:</b> {now}</p>
-
-<h2>Current Rates</h2>
-
-<table border="1" cellpadding="10" cellspacing="0">
-<tr><th>Type</th><th>Price (INR)</th></tr>
-<tr><td>Spot</td><td>₹{price}</td></tr>
-<tr><td>High</td><td>₹{high}</td></tr>
-<tr><td>Low</td><td>₹{low}</td></tr>
-</table>
-
-<hr>
-
-<h2>Gold Price FAQs</h2>
-
-<h3>What is today's gold price in India?</h3>
-<p>This page shows the latest gold price in India for 24K and 22K gold.</p>
-
-<h3>Is gold price the same across all cities?</h3>
-<p>Minor variations may occur due to local taxes and jeweller margins.</p>
-
-<h3>What is the difference between 24K and 22K gold?</h3>
-<p>24K is pure gold, while 22K is used mainly for jewellery.</p>
-
-<h3>How often does the gold price change?</h3>
-<p>Gold prices change daily based on international markets.</p>
-
-<h3>Is gold a good investment?</h3>
-<p>Gold is commonly used as a hedge against inflation.</p>
-
-<hr>
-<p style="font-size:14px;">Powered by Bidyut's Gold Tracker</p>
-
-</body>
-</html>
-"""
-
-    with open(HTML_FILE, "w", encoding="utf-8") as f:
+    with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
+
 
 
 # =====================================================
