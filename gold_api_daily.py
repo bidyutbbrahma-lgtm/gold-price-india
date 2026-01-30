@@ -9,7 +9,7 @@ from datetime import datetime
 # CONFIG
 # =========================
 
-API_KEY = "goldapi-h5rolsmkzhkcgw-io"   # ⚠️ Move to env later
+API_KEY = "goldapi-h5rolsmkzhkcgw-io"   # Move to env later
 
 SYMBOL = "XAU"
 CURRENCY = "INR"
@@ -100,13 +100,13 @@ def save_to_csv(price, high, low):
 
 def generate_html(price, high, low):
 
-    today = datetime.now().strftime("%d %B %Y")
+    now = datetime.now().strftime("%d %B %Y, %I:%M %p")
 
     html = f"""
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gold Price in India Today - {today}</title>
+    <title>Gold Price in India Today</title>
     <meta charset="utf-8">
     <meta name="description" content="Live gold price in India. Updated daily.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -116,7 +116,7 @@ def generate_html(price, high, low):
 
 <h1>Gold Price in India Today</h1>
 
-<p><b>Last Updated:</b> {today}</p>
+<p><b>Last Updated:</b> {now}</p>
 
 <h2>Current Rates</h2>
 
@@ -205,6 +205,7 @@ def main():
     print(" Gold Auto System Running")
     print("===================================")
 
+
     # If already ran today → rebuild only
     if already_ran_today():
 
@@ -223,6 +224,7 @@ def main():
 
     if not data:
         return
+
 
     price = data.get("price")
     high = data.get("high_price")
@@ -253,4 +255,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
