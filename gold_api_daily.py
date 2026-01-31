@@ -3,6 +3,7 @@ import requests
 from datetime import datetime
 import subprocess
 import os
+import csv
 
 API_KEY = "goldapi-h5rolsmkzhkcgw-io"
 URL = "https://www.goldapi.io/api/XAU/INR"
@@ -35,6 +36,7 @@ FAQ_SCHEMA = """
 </script>
 """
 
+# Fetch gold prices from the API
 def fetch_gold_price():
     headers = {
         "x-access-token": API_KEY,
@@ -45,6 +47,15 @@ def fetch_gold_price():
     data = res.json()
     return data["price"], data["high_price"], data["low_price"]
 
+# Update the CSV with new price data
+def update_csv(price, high, low):
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open("gold_prices_india.csv", mode="a", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        # Write new row with timestamp, price, high, and low values
+        writer.writerow([now, price, high, low])
+
+# Generate HTML content
 def generate_html(price, high, low):
     price_g = round(price / OUNCE_TO_GRAM, 2)
     high_g = round(high / OUNCE_TO_GRAM, 2)
@@ -81,6 +92,7 @@ def generate_html(price, high, low):
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html)
 
+# Git push to update the website
 def git_push():
     subprocess.run(["git", "add", "."], check=True)
     subprocess.run(["git", "commit", "-m", "Auto daily update"], check=True)
@@ -89,4 +101,5 @@ def git_push():
 if __name__ == "__main__":
     price, high, low = fetch_gold_price()
     generate_html(price, high, low)
+    update_csv(price, high, low)  # Update the CSV file with the new price data
     git_push()
