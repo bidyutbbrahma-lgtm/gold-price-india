@@ -36,14 +36,14 @@ FAQ_SCHEMA = """
 </script>
 """
 
-# Fetch gold prices from the API
+# Function to fetch gold price data from the API
 def fetch_gold_price():
     headers = {
         "x-access-token": API_KEY,
         "Content-Type": "application/json"
     }
     res = requests.get(URL, headers=headers)
-    res.raise_for_status()
+    res.raise_for_status()  # Ensure the request was successful
     data = res.json()
     return data["price"], data["high_price"], data["low_price"]
 
@@ -55,7 +55,7 @@ def update_csv(price, high, low):
         # Write new row with timestamp, price, high, and low values
         writer.writerow([now, price, high, low])
 
-# Generate HTML content
+# Generate the HTML content for the website
 def generate_html(price, high, low):
     price_g = round(price / OUNCE_TO_GRAM, 2)
     high_g = round(high / OUNCE_TO_GRAM, 2)
@@ -98,8 +98,35 @@ def git_push():
     subprocess.run(["git", "commit", "-m", "Auto daily update"], check=True)
     subprocess.run(["git", "push"], check=True)
 
+# Check if today is a new day or if the API has been called already today
+def check_if_new_day():
+    today_date = datetime.now().strftime("%Y-%m-%d")
+    
+    # If the file doesn't exist, create it
+    if not os.path.exists("last_api_run.txt"):
+        with open("last_api_run.txt", "w") as file:
+            file.write(today_date)
+        return True  # First run, so call API
+
+    # Read the date of the last API call
+    with open("last_api_run.txt", "r") as file:
+        last_run_date = file.read().strip()
+
+    # If the last run date is different from today, it's a new day
+    if last_run_date != today_date:
+        # Update the file with today's date
+        with open("last_api_run.txt", "w") as file:
+            file.write(today_date)
+        return True  # It's a new day, call the API
+
+    return False  # No new day, skip API call
+
 if __name__ == "__main__":
-    price, high, low = fetch_gold_price()
-    generate_html(price, high, low)
-    update_csv(price, high, low)  # Update the CSV file with the new price data
-    git_push()
+    # Check if it's a new day
+    if check_if_new_day():
+        price, high, low = fetch_gold_price()
+        generate_html(price, high, low)
+        update_csv(price, high, low)  # Update the CSV file with the new price data
+        git_push()  # Commit and push to the repository
+    else:
+        print("API already called today. Skipping data fetch.")
