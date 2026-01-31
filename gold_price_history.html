@@ -5,6 +5,9 @@
     <meta charset="utf-8">
     <meta name="description" content="Detailed year-wise gold price history in India from pre-2000 to present. Includes political and economic factors that influenced gold prices.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Chart.js CDN (Ensure this is included) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 </head>
 
 <body style="font-family: Arial, sans-serif; max-width: 1000px; margin:auto; padding:20px; line-height:1.7;">
@@ -12,7 +15,7 @@
 <nav style="margin-bottom:20px; font-size:15px; text-align:center;">
   <a href="index.html" style="margin-right:15px;">Home</a>
   <a href="investment.html" style="margin-right:15px;">Gold Investment</a>
-  <a href="gold_price_history.html" style="margin-right:15px;">Gold Price History</a>
+  <a href="gold-price-history.html" style="margin-right:15px;">Gold Price History</a>
   <a href="about.html">About</a>
 </nav>
 
@@ -106,8 +109,47 @@ Geopolitical tensions such as the **Russia-Ukraine war** and the rise in **globa
 This chart shows the historical price movements of gold in India, comparing key global and domestic events to gold price spikes.
 </p>
 
-<!-- CHART WILL BE ADDED IN NEXT STEP -->
-<p><em>[Interactive gold price chart from 2000 to present will appear here]</em></p>
+<!-- Chart.js - Canvas for gold price chart -->
+<canvas id="goldPriceChart" width="400" height="200"></canvas>
+
+<script>
+    // Data for gold price history (replace with real data)
+    const labels = ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'];
+    const prices = [4400, 4600, 5000, 5400, 5600, 6200, 6500, 7000, 12500, 13000, 16800, 25000, 28000, 30000, 32000, 35000, 38000, 40000, 43000, 46000, 50000, 53000, 56000, 58000];
+
+    // Creating the chart
+    const ctx = document.getElementById('goldPriceChart').getContext('2d');
+    const goldPriceChart = new Chart(ctx, {
+        type: 'line', // Type of chart (Line chart)
+        data: {
+            labels: labels, // X-axis labels (Years)
+            datasets: [{
+                label: 'Gold Price in INR (per 10 grams)', // Label for the chart
+                data: prices, // Data for the chart (Prices)
+                borderColor: 'gold', // Line color
+                backgroundColor: 'rgba(255, 215, 0, 0.2)', // Fill color
+                borderWidth: 2 // Line width
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Year' // X-axis title (Years)
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Price (INR per 10g)' // Y-axis title (Price)
+                    }
+                }
+            }
+        }
+    });
+</script>
 
 <hr>
 
