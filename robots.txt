@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bidyutbrahma-lgtm.github.io/gold-price-india/sitemap.xml
