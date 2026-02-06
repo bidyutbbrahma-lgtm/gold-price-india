@@ -5,7 +5,7 @@ import subprocess
 import os
 import csv
 
-API_KEY = "goldapi-h5rolsmkzhkcgw-io"
+API_KEY = os.getenv("GOLD_API_KEY")
 URL = "https://www.goldapi.io/api/XAU/INR"
 OUNCE_TO_GRAM = 31.1035
 
